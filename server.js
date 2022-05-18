@@ -1,27 +1,29 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
-const cors = require("cors"); //->NUEVO
+const cookieParser = require("cookie-parser");
 
-//Para usar json
+//Para usar Json y obtener datos de URL
 app.use( express.json(), express.urlencoded({ extended: true }) );
 
-//Esto nos permite acceder desde un origen distinto 
-app.use( 
-		cors({
-				//URL frontend
-				origin: "http://localhost:3000"
-		})
+//Para usar cookies
+app.use(cookieParser());
+
+//Permitir accesar desde un origen distinto
+app.use (
+    cors( {
+        origin: "http://localhost:3000",
+        //Credenciales
+        credentials: true
+    })
 )
 
-
-
-
-//Inicializamos la DB
+//Inicilizamos BD
 require("./server/config/mongoose.config");
 
-//importamos las rutas
+//Importamos rutas
 const misRutas = require("./server/routes/autor.routes");
 misRutas(app);
 
 //Ejecutamos server
-app.listen(8000, () => console.log("Server listo!"));
+app.listen(8000, () => console.log("Sevidor listo!"));
